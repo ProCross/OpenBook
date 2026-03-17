@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Schools - OpenBook</title>
+    <link rel="icon" type="image/x-icon" href="https://static.photos/minimal/32x32/1">
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        primary: {
+                            50: '#ecfdf5',
+                            100: '#d1fae5',
+                            200: '#a7f3d0',
+                            300: '#6ee7b7',
+                            400: '#34d399',
+                            500: '#10b981',
+                            600: '#059669',
+                            700: '#047857',
+                            800: '#065f46',
+                            900: '#064e3b'
+                        },
+                        secondary: {
+                            50: '#fdf4ff',
+                            100: '#fae8ff',
+                            200: '#f5d0fe',
+                            300: '#f0abfc',
+                            400: '#e879f9',
+                            500: '#d946ef',
+                            600: '#c026d3',
+                            700: '#a21caf',
+                            800: '#86198f',
+                            900: '#701a75'
+                        },
+                        slate: {
+                            850: '#1e293b',
+                            900: '#0f172a'
+                        }
+                    }
+                }
+            }
+        };
+    </script>
+</head>
+
+<body class="bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100 transition-colors duration-200">
+    <sherpa-navbar></sherpa-navbar>
+
+    <a href="/"
+        class="fixed top-4 right-4 z-50 w-12 h-12 rounded-full bg-primary-500 hover:bg-primary-600 text-white shadow-lg hover:shadow-xl transition-all flex items-center justify-center group sm:hidden"
+        title="Back to Home" aria-label="Back to Home">
+        <i data-feather="home" class="w-5 h-5 group-hover:scale-110 transition-transform"></i>
+    </a>
+
+    <div class="min-h-screen bg-slate-50 dark:bg-slate-900 py-12 px-4 sm:px-6 lg:px-8">
+        <div class="max-w-7xl mx-auto">
+            <div class="mb-12">
+                <h1 class="text-4xl font-bold mb-4">Select Your School</h1>
+                <p class="text-slate-600 dark:text-slate-400">Choose your university to browse course listings and
+                    textbook prices.</p>
+            </div>
+
+            <div class="mb-8 p-6 rounded-2xl bg-white dark:bg-slate-800 shadow-lg">
+                <div class="flex flex-col sm:flex-row gap-4">
+                    <div class="flex-1 relative">
+                        <i data-feather="search" class="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400"></i>
+                        <input
+                            type="text"
+                            id="school-search"
+                            placeholder="Search schools by name, location, or abbreviation..."
+                            class="w-full pl-12 pr-4 py-4 rounded-xl bg-slate-50 dark:bg-slate-700 border border-slate-200 dark:border-slate-600 focus:border-primary-500 dark:focus:border-primary-500 outline-none transition-colors"
+                            autocomplete="off"
+                        >
+                    </div>
+                    <div class="flex gap-2">
+                        <select id="location-filter" class="px-4 py-4 rounded-xl bg-slate-50 dark:bg-slate-700 border border-slate-200 dark:border-slate-600 outline-none focus:border-primary-500 dark:focus:border-primary-500">
+                            <option value="">All Locations</option>
+                        </select>
+                        <button id="filter-btn" type="button" class="px-6 py-4 bg-primary-500 hover:bg-primary-600 text-white rounded-xl font-medium transition-colors flex items-center gap-2">
+                            <i data-feather="filter" class="w-5 h-5"></i>
+                            <span class="hidden sm:inline">Filter</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div id="schools-grid" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+
+            <div id="empty-state" class="hidden text-center py-16">
+                <i data-feather="search" class="w-16 h-16 mx-auto mb-4 text-slate-300 dark:text-slate-600"></i>
+                <h3 class="text-xl font-semibold mb-2">No schools found</h3>
+                <p class="text-slate-500">Try adjusting your search or filters</p>
+            </div>
+
+            <div
+                class="mt-12 text-center p-8 rounded-2xl bg-gradient-to-r from-primary-50 to-secondary-50 dark:from-primary-900/20 dark:to-secondary-900/20 border border-dashed border-primary-300 dark:border-primary-700">
+                <p class="text-slate-600 dark:text-slate-400 mb-4">Don't see your school?</p>
+                <button id="request-school-btn" type="button" class="px-6 py-3 bg-white dark:bg-slate-800 rounded-xl font-medium text-primary-600 dark:text-primary-400 shadow-sm hover:shadow-md transition-shadow flex items-center gap-2 mx-auto">
+                    <i data-feather="plus-circle" class="w-5 h-5"></i>
+                    Request to add your school
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <sherpa-footer></sherpa-footer>
+
+    <a href="/"
+        class="hidden sm:flex fixed bottom-6 right-6 z-50 w-14 h-14 rounded-full bg-primary-500 hover:bg-primary-600 text-white shadow-lg hover:shadow-xl transition-all items-center justify-center group"
+        title="Back to Home" aria-label="Back to Home">
+        <i data-feather="home" class="w-6 h-6 group-hover:scale-110 transition-transform"></i>
+    </a>
+
+    <school-request-modal id="schoolRequestModal"></school-request-modal>
+
+    <script src="components/navbar.js"></script>
+    <script src="components/footer.js"></script>
+    <script src="components/school-request-modal.js"></script>
+    <script src="script.js"></script>
+
+    <script type="module">
+        import { schoolsData } from './components/schools-data.js';
+
+        const stateNames = {
+            CA: 'California',
+            CT: 'Connecticut',
+            IL: 'Illinois',
+            IN: 'Indiana',
+            MA: 'Massachusetts',
+            MD: 'Maryland',
+            MI: 'Michigan',
+            NC: 'North Carolina',
+            NH: 'New Hampshire',
+            NJ: 'New Jersey',
+            NY: 'New York',
+            PA: 'Pennsylvania',
+            TX: 'Texas'
+        };
+
+        const normalizedSchoolsData = Array.isArray(schoolsData) ? schoolsData.filter((school) => school && typeof school === 'object') : [];
+
+        function escapeHtml(value) {
+            return String(value)
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#39;');
+        }
+
+        function toSafeString(value) {
+            return typeof value === 'string' ? value : '';
+        }
+
+        function getCourseCountLabel(courseCount) {
+            return `${courseCount} course${courseCount === 1 ? '' : 's'}`;
+        }
+
+        function getCourseUrl(schoolId) {
+            const school = normalizedSchoolsData.find(s => toSafeString(s.id) === toSafeString(schoolId));
+            const abbr = school ? school.abbr : schoolId;
+            return `/courses.html?school=${encodeURIComponent(toSafeString(abbr))}`;
+        }
+
+        function replaceIcons() {
+            if (window.feather && typeof window.feather.replace === 'function') {
+                window.feather.replace();
+            }
+        }
+
+        function renderLocationOptions() {
+            const locationFilter = document.getElementById('location-filter');
+            if (!locationFilter) return;
+
+            const uniqueStates = [...new Set(
+                normalizedSchoolsData
+                    .map((school) => toSafeString(school.state).trim())
+                    .filter(Boolean)
+            )].sort((a, b) => {
+                const stateA = stateNames[a] || a;
+                const stateB = stateNames[b] || b;
+                return stateA.localeCompare(stateB);
+            });
+
+            locationFilter.innerHTML = [
+                '<option value="">All Locations</option>',
+                ...uniqueStates.map((stateCode) => {
+                    const label = stateNames[stateCode] || stateCode;
+                    return `<option value="${escapeHtml(stateCode)}">${escapeHtml(label)}</option>`;
+                })
+            ].join('');
+        }
+
+        function renderSchools(schoolsToRender) {
+            const grid = document.getElementById('schools-grid');
+            const emptyState = document.getElementById('empty-state');
+            if (!grid || !emptyState) return;
+
+            if (!Array.isArray(schoolsToRender) || schoolsToRender.length === 0) {
+                grid.innerHTML = '';
+                emptyState.classList.remove('hidden');
+                replaceIcons();
+                return;
+            }
+
+            emptyState.classList.add('hidden');
+
+            grid.innerHTML = schoolsToRender.map((school) => {
+                const schoolId = toSafeString(school.id).trim();
+                const schoolName = escapeHtml(toSafeString(school.name) || 'Unknown School');
+                const schoolAbbr = escapeHtml(toSafeString(school.abbr));
+                const schoolLocation = escapeHtml(toSafeString(school.location) || 'Location unavailable');
+                const schoolImage = escapeHtml(toSafeString(school.image) || 'https://static.photos/minimal/640x480');
+                const courseCountRaw = Number(school.courses);
+                const courseCount = Number.isFinite(courseCountRaw) && courseCountRaw >= 0 ? courseCountRaw : 0;
+                const courseUrl = getCourseUrl(schoolId);
+
+                return `
+                    <a
+                        href="${courseUrl}"
+                        data-school-id="${escapeHtml(schoolId)}"
+                        class="school-card group relative overflow-hidden rounded-2xl bg-white dark:bg-slate-800 shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-2"
+                    >
+                        <div class="aspect-[4/3] relative overflow-hidden">
+                            <img src="${schoolImage}" alt="${schoolName}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" loading="lazy">
+                            <div class="absolute inset-0 bg-gradient-to-t from-slate-900/90 via-slate-900/40 to-transparent"></div>
+                            <div class="absolute top-4 left-4 hidden sm:block">
+                                <span class="px-3 py-1.5 rounded-full bg-white/20 backdrop-blur text-white text-sm font-bold">${schoolAbbr}</span>
+                            </div>
+                        </div>
+                        <div class="p-6">
+                            <h3 class="text-lg font-bold mb-2 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors">${schoolName}</h3>
+                            <p class="text-slate-600 dark:text-slate-400 text-sm flex items-center gap-1">
+                                <i data-feather="map-pin" class="w-4 h-4"></i>
+                                ${schoolLocation}
+                            </p>
+                            <div class="mt-4 flex items-center justify-between">
+                                <span class="text-sm text-slate-500">${escapeHtml(getCourseCountLabel(courseCount))}</span>
+                                <span class="w-8 h-8 rounded-full bg-primary-100 dark:bg-primary-900/30 flex items-center justify-center text-primary-600 dark:text-primary-400 group-hover:bg-primary-500 group-hover:text-white transition-all">
+                                    <i data-feather="arrow-right" class="w-4 h-4"></i>
+                                </span>
+                            </div>
+                        </div>
+                    </a>
+                `;
+            }).join('');
+
+            grid.querySelectorAll('.school-card').forEach((card) => {
+                card.addEventListener('click', (event) => {
+                    const schoolId = card.dataset.schoolId;
+                    if (!schoolId) {
+                        return;
+                    }
+                    event.preventDefault();
+                    selectSchoolAndGo(schoolId);
+                });
+            });
+
+            replaceIcons();
+        }
+
+        function filterSchools() {
+            const searchInput = document.getElementById('school-search');
+            const locationSelect = document.getElementById('location-filter');
+            const searchTerm = toSafeString(searchInput ? searchInput.value : '').trim().toLowerCase();
+            const locationFilter = toSafeString(locationSelect ? locationSelect.value : '').trim();
+
+            const filtered = normalizedSchoolsData.filter((school) => {
+                const schoolName = toSafeString(school.name).toLowerCase();
+                const schoolAbbr = toSafeString(school.abbr).toLowerCase();
+                const schoolLocation = toSafeString(school.location).toLowerCase();
+                const schoolState = toSafeString(school.state).trim();
+
+                const matchesSearch =
+                    schoolName.includes(searchTerm) ||
+                    schoolAbbr.includes(searchTerm) ||
+                    schoolLocation.includes(searchTerm);
+
+                const matchesLocation = !locationFilter || schoolState === locationFilter;
+
+                return matchesSearch && matchesLocation;
+            });
+
+            renderSchools(filtered);
+        }
+
+        function selectSchoolAndGo(schoolId) {
+            const normalizedSchoolId = toSafeString(schoolId).trim();
+            if (!normalizedSchoolId) return;
+
+            const school = normalizedSchoolsData.find((item) => toSafeString(item.id).trim() === normalizedSchoolId);
+            if (!school) {
+                window.location.href = getCourseUrl(normalizedSchoolId);
+                return;
+            }
+
+            try {
+                localStorage.setItem('selectedSchool', JSON.stringify(school));
+            } catch (error) {
+            }
+
+            if (window.store && typeof window.store.setSchool === 'function') {
+                try {
+                    window.store.setSchool(school);
+                } catch (error) {
+                }
+            }
+
+            // Pass abbreviation in URL
+            window.location.href = `/courses.html?school=${encodeURIComponent(toSafeString(school.abbr))}`;
+        }
+
+        function showRequestSchoolModal() {
+            const modal = document.getElementById('schoolRequestModal');
+            if (modal && typeof modal.open === 'function') {
+                modal.open();
+                return;
+            }
+            alert('Modal component not loaded yet. Please try again.');
+        }
+
+        window.selectSchoolAndGo = selectSchoolAndGo;
+        window.showRequestSchoolModal = showRequestSchoolModal;
+
+        document.addEventListener('DOMContentLoaded', () => {
+            renderLocationOptions();
+            renderSchools(normalizedSchoolsData);
+
+            const searchInput = document.getElementById('school-search');
+            const locationSelect = document.getElementById('location-filter');
+            const filterButton = document.getElementById('filter-btn');
+            const requestSchoolButton = document.getElementById('request-school-btn');
+
+            if (searchInput) {
+                searchInput.addEventListener('input', filterSchools);
+            }
+
+            if (locationSelect) {
+                locationSelect.addEventListener('change', filterSchools);
+            }
+
+            if (filterButton) {
+                filterButton.addEventListener('click', filterSchools);
+            }
+
+            if (requestSchoolButton) {
+                requestSchoolButton.addEventListener('click', showRequestSchoolModal);
+            }
+
+            const storedSchool = localStorage.getItem('selectedSchool');
+            if (storedSchool && window.store && typeof window.store.setSchool === 'function') {
+                try {
+                    const parsedSchool = JSON.parse(storedSchool);
+                    if (parsedSchool && typeof parsedSchool === 'object') {
+                        window.store.setSchool(parsedSchool);
+                    }
+                } catch (error) {
+                }
+            }
+
+            replaceIcons();
+        });
+    </script>
+</body>
+
+</html>

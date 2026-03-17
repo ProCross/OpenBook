@@ -1,0 +1,776 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OpenBook - Cheap Textbooks</title>
+    <meta name="description" content="Find cheap textbooks!">
+    <link rel="icon" type="image/x-icon"
+        href="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fstatic.vecteezy.com%2Fsystem%2Fresources%2Fpreviews%2F000%2F626%2F702%2Foriginal%2Feducation-book-logo-template-vector-illustration.jpg&f=1&nofb=1&ipt=4e16039a2ac7b93b871464866558dee8d7cbe6d24c9e0399046ffe4be07b77a5">
+    <link rel="stylesheet" href="style.css">
+
+    <style>
+        html,
+        body {
+            height: auto;
+            overflow-x: hidden;
+            overflow-y: auto;
+        }
+
+        body.use-app-scroll {
+            height: 100%;
+            overflow: hidden;
+        }
+
+        body.use-app-scroll #app {
+            height: 100vh;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        html {
+            scroll-snap-type: y mandatory;
+            scroll-behavior: auto;
+        }
+
+        html.snap-off {
+            scroll-snap-type: none;
+        }
+
+        #app {
+            height: auto;
+            overflow: visible;
+        }
+
+        .no-snap {
+            min-height: auto;
+            overflow: visible;
+            scroll-snap-align: none;
+            scroll-snap-stop: normal;
+        }
+
+        sherpa-footer {
+            height: 0;
+            overflow: hidden;
+            padding: 0;
+            margin: 0;
+        }
+
+        #testimonials-grid {
+            transition: opacity 200ms ease;
+        }
+
+        .testimonial-card {
+            transition: opacity 900ms ease, transform 900ms ease;
+        }
+
+        .testimonial-card.fade-out {
+            opacity: 0;
+            transform: translateY(10px);
+        }
+
+        .testimonial-card.fade-in {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
+
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        primary: {
+                            50: '#ecfdf5',
+                            100: '#d1fae5',
+                            200: '#a7f3d0',
+                            300: '#6ee7b7',
+                            400: '#34d399',
+                            500: '#10b981',
+                            600: '#059669',
+                            700: '#047857',
+                            800: '#065f46',
+                            900: '#064e3b'
+                        },
+                        secondary: {
+                            50: '#fdf4ff',
+                            100: '#fae8ff',
+                            200: '#f5d0fe',
+                            300: '#f0abfc',
+                            400: '#e879f9',
+                            500: '#d946ef',
+                            600: '#c026d3',
+                            700: '#a21caf',
+                            800: '#86198f',
+                            900: '#701a75'
+                        },
+                        slate: {
+                            850: '#1e293b',
+                            900: '#0f172a'
+                        }
+                    },
+                    animation: {
+                        'float': 'float 6s ease-in-out infinite',
+                        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite'
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-20px)' }
+                        }
+                    }
+                }
+            }
+        };
+    </script>
+</head>
+
+<body class="bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100 transition-colors duration-200">
+    <sherpa-navbar></sherpa-navbar>
+
+    <button id="login-button" type="button" class="fixed top-4 right-[0.2in] z-50 px-6 py-3 bg-white/20 hover:bg-white/30 backdrop-blur-md border border-white/30 text-white font-bold rounded-xl shadow-lg transition-all cursor-pointer" style="text-shadow: 0 2px 4px rgba(0,0,0,0.85);">
+        Login
+    </button>
+
+    <main id="app">
+        <section class="relative min-h-screen flex items-center justify-center overflow-hidden">
+            <div class="absolute inset-0 mesh-gradient"></div>
+            <div class="absolute inset-0">
+                <div
+                    class="absolute top-20 left-10 w-96 h-96 bg-primary-500/30 rounded-full blur-3xl animate-pulse-slow">
+                </div>
+                <div class="absolute bottom-20 right-10 w-[500px] h-[500px] bg-secondary-500/30 rounded-full blur-3xl animate-pulse-slow"
+                    style="animation-delay: 1.5s;"></div>
+                <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-primary-400/20 rounded-full blur-3xl animate-pulse-slow"
+                    style="animation-delay: 3s;"></div>
+            </div>
+
+            <div class="absolute top-20 left-8 w-16 h-16 rounded-2xl bg-white/10 backdrop-blur-sm border border-white/20 animate-float"
+                style="animation-delay: 0s;">
+                <div class="w-full h-full flex items-center justify-center text-primary-400">
+                    <i data-feather="book" class="w-8 h-8"></i>
+                </div>
+            </div>
+            <div class="absolute top-28 right-8 w-20 h-20 rounded-2xl bg-white/10 backdrop-blur-sm border border-white/20 animate-float"
+                style="animation-delay: 1s;">
+                <div class="w-full h-full flex items-center justify-center text-secondary-400">
+                    <i data-feather="dollar-sign" class="w-10 h-10"></i>
+                </div>
+            </div>
+            <div class="absolute bottom-32 left-12 w-14 h-14 rounded-2xl bg-white/10 backdrop-blur-sm border border-white/20 animate-float"
+                style="animation-delay: 2s;">
+                <div class="w-full h-full flex items-center justify-center text-amber-400">
+                    <i data-feather="users" class="w-7 h-7"></i>
+                </div>
+            </div>
+            <div class="absolute bottom-24 right-8 w-16 h-16 rounded-2xl bg-white/10 backdrop-blur-sm border border-white/20 animate-float"
+                style="animation-delay: 0.5s;">
+                <div class="w-full h-full flex items-center justify-center text-green-400">
+                    <i data-feather="check-circle" class="w-9 h-9"></i>
+                </div>
+            </div>
+
+            <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center -mt-8 sm:mt-0">
+                <div class="mt-4">
+                    <div
+                        class="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-white/80 backdrop-blur-md border border-black/20 text-slate-900 text-sm font-semibold mb-8 -mt-32 sm:-mt-20 animate-float shadow-md">
+                        <span class="w-2 h-2 rounded-full bg-green-400 animate-pulse"></span>
+                        <span>Trusted by 50,000+ students</span>
+                    </div>
+
+                    <h1 class="text-5xl sm:text-6xl lg:text-8xl font-bold mb-6 leading-tight sm:-mt-12 md:-mt-6">
+                        <span class="text-white" style="text-shadow: 0 0 2px rgba(0,0,0,0.8), 0 0 6px rgba(0,0,0,0.6);">Stop Overpaying for</span><br>
+                        <span class="gradient-text">Textbooks</span>
+                    </h1>
+                </div>
+
+                <p
+                    class="text-xl sm:text-2xl text-slate-900 max-w-3xl mx-auto mb-12 -mt-4 leading-relaxed hovered-element">
+                    Compare prices from 20+ sellers, read real student reviews, and connect with classmates to split
+                    costs. Save up to <span class="text-primary-400 font-bold">80%</span> on your course materials.
+                </p>
+
+                <div class="flex flex-col sm:flex-row items-center justify-center gap-4 mb-16">
+                    <a href="/find-textbooks.html" id="find-textbooks-link"
+                        class="group px-10 py-5 bg-gradient-to-r from-primary-600 to-primary-700 hover:from-primary-700 hover:to-primary-800 text-white text-lg font-bold rounded-2xl transition-all glow-primary shadow-2xl ring-1 ring-white/30 flex items-center gap-3">
+                        <span>Find Your Textbooks</span>
+                        <i data-feather="arrow-right" class="w-6 h-6 ml-1 group-hover:translate-x-1 transition-transform"></i>
+                    </a>
+                    <a href="#how-it-works"
+                        class="px-10 py-5 bg-white/20 hover:bg-white/30 backdrop-blur-md border border-white/30 text-white text-lg font-bold rounded-2xl shadow-lg transition-all flex items-center gap-3"
+                        style="text-shadow: 0 2px 4px rgba(0,0,0,0.85);">
+                        <span>How It Works</span>
+                    </a>
+                </div>
+
+                <div class="max-w-3xl mx-auto mb-20 -mt-12 sm:-mt-6">
+                    <div
+                        class="rounded-2xl p-2 flex flex-col sm:flex-row gap-2 bg-white/80 backdrop-blur-md border border-black/20 shadow-md">
+                        <div class="flex-1 flex items-center px-6 py-4 bg-white rounded-xl border border-black/10">
+                            <i data-feather="search" class="w-6 h-6 text-slate-400 mr-4"></i>
+                            <input type="text" placeholder="Search by school, course code, or professor..." class="w-full bg-transparent border-none outline-none text-slate-900 placeholder-slate-500 text-lg" id="hero-search" autocomplete="off">
+                        </div>
+                        <button id="hero-search-button" type="button" class="px-8 py-4 bg-secondary-500 hover:bg-secondary-600 text-white font-bold rounded-xl transition-all flex items-center justify-center gap-2">
+                            <span>Search</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-8 max-w-4xl mx-auto -mt-12 text-slate-900">
+                    <div class="text-center">
+                        <div class="text-4xl sm:text-5xl font-bold text-slate-900 mb-2"
+                            style="text-shadow: 0 1px 1px rgba(0,0,0,0.15);">$2.4M</div>
+                        <div class="text-slate-800 font-semibold" style="text-shadow: 0 1px 1px rgba(0,0,0,0.12);">Saved
+                            by students</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-4xl sm:text-5xl font-bold text-slate-900 mb-2"
+                            style="text-shadow: 0 1px 1px rgba(0,0,0,0.15);">50K+</div>
+                        <div class="text-slate-800 font-semibold" style="text-shadow: 0 1px 1px rgba(0,0,0,0.12);">
+                            Course listings</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-4xl sm:text-5xl font-bold text-slate-900 mb-2"
+                            style="text-shadow: 0 1px 1px rgba(0,0,0,0.15);">20+</div>
+                        <div class="text-slate-800 font-semibold" style="text-shadow: 0 1px 1px rgba(0,0,0,0.12);">Price
+                            sources</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-4xl sm:text-5xl font-bold text-slate-900 mb-2"
+                            style="text-shadow: 0 1px 1px rgba(0,0,0,0.15);">4.9<span class="text-amber-400">★</span>
+                        </div>
+                        <div class="text-slate-800 font-semibold" style="text-shadow: 0 1px 1px rgba(0,0,0,0.12);">
+                            Student rating</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce">
+                <a href="#features" class="text-slate-400 hover:text-white transition-colors">
+                    <i data-feather="chevron-down" class="w-8 h-8"></i>
+                </a>
+            </div>
+        </section>
+
+        <section id="features" class="py-24 px-4 sm:px-6 lg:px-8 bg-slate-50 dark:bg-slate-900 -mt-3">
+            <div class="max-w-7xl mx-auto">
+                <div class="text-center mb-16">
+                    <span class="inline-block px-4 py-2 rounded-full bg-primary-100 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300 text-sm font-semibold mb-4">Why OpenBook?</span>
+                    <h2 class="text-4xl sm:text-5xl font-bold mb-6">Everything you need to save on textbooks</h2>
+                    <p class="text-xl text-slate-600 dark:text-slate-400 max-w-2xl mx-auto">We aggregate prices, verify
+                        requirements with real students, and help you connect with classmates.</p>
+                </div>
+
+                <div class="grid md:grid-cols-3 gap-8">
+                    <div
+                        class="group p-8 rounded-3xl bg-white dark:bg-slate-800 shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-2">
+                        <div
+                            class="w-16 h-16 rounded-2xl bg-gradient-to-br from-primary-500 to-primary-600 flex items-center justify-center text-white mb-6 group-hover:scale-110 transition-transform">
+                            <i data-feather="search" class="w-8 h-8"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold mb-4">Smart Search</h3>
+                        <p class="text-slate-600 dark:text-slate-400 leading-relaxed">Find textbooks by course code,
+                            professor, or section. No more hunting for ISBNs or guessing which books you need.</p>
+                    </div>
+
+                    <div
+                        class="group p-8 rounded-3xl bg-white dark:bg-slate-800 shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-2">
+                        <div
+                            class="w-16 h-16 rounded-2xl bg-gradient-to-br from-secondary-500 to-secondary-600 flex items-center justify-center text-white mb-6 group-hover:scale-110 transition-transform">
+                            <i data-feather="bar-chart-2" class="w-8 h-8"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold mb-4">Price Comparison</h3>
+                        <p class="text-slate-600 dark:text-slate-400 leading-relaxed">Compare prices from campus
+                            bookstore, Amazon, Chegg, AbeBooks, and more. See new, used, rental, and digital options
+                            side by side.</p>
+                    </div>
+
+                    <div
+                        class="group p-8 rounded-3xl bg-white dark:bg-slate-800 shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-2">
+                        <div
+                            class="w-16 h-16 rounded-2xl bg-gradient-to-br from-amber-500 to-orange-600 flex items-center justify-center text-white mb-6 group-hover:scale-110 transition-transform">
+                            <i data-feather="message-circle" class="w-8 h-8"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold mb-4">Real Reviews</h3>
+                        <p class="text-slate-600 dark:text-slate-400 leading-relaxed">Read reviews from students who
+                            actually took the course. Find out if books are truly required or if older editions work.
+                        </p>
+                    </div>
+
+                    <div
+                        class="group p-8 rounded-3xl bg-white dark:bg-slate-800 shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-2">
+                        <div
+                            class="w-16 h-16 rounded-2xl bg-gradient-to-br from-green-500 to-emerald-600 flex items-center justify-center text-white mb-6 group-hover:scale-110 transition-transform">
+                            <i data-feather="users" class="w-8 h-8"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold mb-4">Connect &amp; Share</h3>
+                        <p class="text-slate-600 dark:text-slate-400 leading-relaxed">Form study groups, split textbook
+                            costs with classmates, and share free resources. Built-in community for every course.</p>
+                    </div>
+
+                    <div
+                        class="group p-8 rounded-3xl bg-white dark:bg-slate-800 shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-2">
+                        <div
+                            class="w-16 h-16 rounded-2xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center text-white mb-6 group-hover:scale-110 transition-transform">
+                            <i data-feather="bell" class="w-8 h-8"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold mb-4">Price Alerts</h3>
+                        <p class="text-slate-600 dark:text-slate-400 leading-relaxed">Get notified when prices drop. Set
+                            your target price and we'll alert you when a seller hits it.</p>
+                    </div>
+
+                    <div
+                        class="group p-8 rounded-3xl bg-white dark:bg-slate-800 shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-2">
+                        <div
+                            class="w-16 h-16 rounded-2xl bg-gradient-to-br from-purple-500 to-pink-600 flex items-center justify-center text-white mb-6 group-hover:scale-110 transition-transform">
+                            <i data-feather="smartphone" class="w-8 h-8"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold mb-4">Mobile Friendly</h3>
+                        <p class="text-slate-600 dark:text-slate-400 leading-relaxed">Access everything on the go.
+                            Compare prices while standing in the campus bookstore line.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="how-it-works" class="py-24 px-4 sm:px-6 lg:px-8">
+            <div class="max-w-7xl mx-auto">
+                <div class="text-center mb-16">
+                    <span class="inline-block px-4 py-2 rounded-full bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 text-sm font-semibold mb-4">Simple Process</span>
+                    <h2 class="text-4xl sm:text-5xl font-bold mb-6">Get your textbooks in 3 easy steps</h2>
+                </div>
+
+                <div class="grid md:grid-cols-3 gap-8 relative">
+                    <div
+                        class="hidden md:block absolute top-24 left-1/6 right-1/6 h-0.5 bg-gradient-to-r from-amber-500 via-blue-500 to-rose-500">
+                    </div>
+
+                    <div class="relative text-center">
+                        <div
+                            class="w-20 h-20 mx-auto mb-6 rounded-2xl bg-slate-100 text-slate-900 flex items-center justify-center text-3xl font-semibold shadow-sm ring-[3px] ring-amber-400/50 relative z-10">
+                            1</div>
+                        <div
+                            class="p-8 rounded-3xl bg-white dark:bg-slate-800 shadow-lg h-[420px] flex flex-col justify-center">
+                            <div class="w-full h-40 mb-6 overflow-hidden rounded-2xl"><img src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fwww.discovery.org%2Fm%2Fsites%2F71%2F2024%2F12%2Fa-university-lecture-hall-filled-with-students-attentively-l-910133067-stockpack-adobe_stock-2400x1345.jpg&f=1&nofb=1&ipt=e726fdabf683d8687f017499555e692821cf06057b8e6750c9eb6fa3a2577d5c" alt="Find your course" class="w-full h-full object-cover" loading="lazy">
+                            </div>
+                            <h3 class="text-xl font-bold mb-3">Find Your Course</h3>
+                            <p class="text-slate-600 dark:text-slate-400">Search by school, course code, or professor.
+                                We'll show you exactly which textbooks you need.</p>
+                        </div>
+                    </div>
+
+                    <div class="relative text-center">
+                        <div
+                            class="w-20 h-20 mx-auto mb-6 rounded-2xl bg-slate-100 text-slate-900 flex items-center justify-center text-3xl font-semibold shadow-sm ring-[3px] ring-blue-400/50 relative z-10">
+                            2</div>
+                        <div
+                            class="p-8 rounded-3xl bg-white dark:bg-slate-800 shadow-lg h-[420px] flex flex-col justify-center">
+                            <div class="w-full h-40 mb-6 overflow-hidden rounded-2xl"><img src="https://static.vecteezy.com/system/resources/previews/071/668/797/non_2x/gold-scale-balance-coin-finance-convey-wealth-contrast-with-gold-and-silver-coins-free-photo.jpeg" alt="Compare prices" class="w-full h-full object-cover" loading="lazy">
+                            </div>
+                            <h3 class="text-xl font-bold mb-3">Compare Prices</h3>
+                            <p class="text-slate-600 dark:text-slate-400">See prices from 20+ sellers at once. Filter by
+                                new, used, rental, or digital formats.</p>
+                        </div>
+                    </div>
+
+                    <div class="relative text-center">
+                        <div
+                            class="w-20 h-20 mx-auto mb-6 rounded-2xl bg-slate-100 text-slate-900 flex items-center justify-center text-3xl font-semibold shadow-sm ring-[3px] ring-rose-400/50 relative z-10">
+                            3</div>
+                        <div
+                            class="p-8 rounded-3xl bg-white dark:bg-slate-800 shadow-lg h-[420px] flex flex-col justify-center">
+                            <div class="w-full h-40 mb-6 overflow-hidden rounded-2xl"><img src="https://static.vecteezy.com/system/resources/previews/006/971/755/non_2x/social-media-and-technology-internet-communication-connection-concept-business-woman-s-hands-is-using-social-media-via-smartphone-with-notification-icon-technology-digital-media-mobile-phone-network-free-photo.jpg" alt="Save and connect" class="w-full h-full object-cover" loading="lazy">
+                            </div>
+                            <h3 class="text-xl font-bold mb-3">Save &amp; Connect</h3>
+                            <p class="text-slate-600 dark:text-slate-400">Buy the cheapest option or team up with
+                                classmates to split costs and share resources.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="py-24 px-4 sm:px-6 lg:px-8 bg-slate-50 dark:bg-slate-900">
+            <div class="max-w-7xl mx-auto">
+                <div class="flex items-center justify-between mb-12">
+                    <div>
+                        <span class="inline-block px-4 py-2 rounded-full bg-primary-100 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300 text-sm font-semibold mb-4">Top Universities</span>
+                        <h2 class="text-4xl font-bold text-slate-900 dark:text-white">Popular Schools</h2>
+                    </div>
+                    <a href="/schools.html"
+                        class="hidden sm:flex items-center gap-2 px-6 py-3 bg-white dark:bg-slate-800 rounded-xl font-medium text-primary-600 dark:text-primary-400 shadow-lg hover:shadow-xl transition-all">
+                        View all schools
+                        <i data-feather="arrow-right" class="w-5 h-5"></i>
+                    </a>
+                </div>
+
+                <schools-slideshow></schools-slideshow>
+
+                <div class="mt-8 text-center sm:hidden">
+                    <a href="/schools.html"
+                        class="inline-flex items-center gap-2 px-6 py-3 bg-white dark:bg-slate-800 rounded-xl font-medium text-primary-600 dark:text-primary-400 shadow-lg">
+                        View all schools
+                        <i data-feather="arrow-right" class="w-5 h-5"></i>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <section id="student-stories" class="py-24 px-4 sm:px-6 lg:px-8">
+            <div class="max-w-7xl mx-auto">
+                <div class="text-center mb-16">
+                    <span class="inline-block px-4 py-2 rounded-full bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-300 text-sm font-semibold mb-4">Student Stories</span>
+                    <h2 class="text-4xl sm:text-5xl font-bold mb-6">What students are saying</h2>
+                </div>
+                <div id="testimonials-grid" class="grid md:grid-cols-3 gap-8"></div>
+            </div>
+        </section>
+
+        <section class="pt-24 pb-[0.25in] px-4 sm:px-6 lg:px-8 relative overflow-hidden no-snap">
+            <div class="absolute inset-0 bg-gradient-to-r from-primary-600 to-secondary-600"></div>
+            <div class="absolute inset-0">
+                <div class="absolute top-0 left-0 w-96 h-96 bg-white/10 rounded-full blur-3xl"></div>
+                <div class="absolute bottom-0 right-0 w-96 h-96 bg-white/10 rounded-full blur-3xl"></div>
+            </div>
+
+            <div class="relative max-w-4xl mx-auto text-center">
+                <h2 class="text-4xl sm:text-5xl lg:text-6xl font-bold text-white mb-6">Ready to start saving?</h2>
+                <p class="text-xl text-white/80 mb-10 max-w-2xl mx-auto">Join thousands of students who are already
+                    saving hundreds on textbooks every semester. It's free to use!</p>
+                <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+                    <a href="/find-textbooks.html"
+                        class="px-10 py-5 bg-white text-primary-600 font-bold text-lg rounded-2xl shadow-2xl hover:shadow-white/25 transition-all flex items-center gap-3">
+                        <span>Get Started Free</span>
+                        <i data-feather="arrow-right" class="w-6 h-6 ml-1"></i>
+                    </a>
+                    <a href="#features"
+                        class="px-10 py-5 bg-white/10 backdrop-blur-md border border-white/20 text-white font-bold text-lg rounded-2xl hover:bg-white/20 transition-all">Learn
+                        More</a>
+                </div>
+                <div class="mt-6 text-center text-sm text-white/60 font-normal tracking-normal">© 2026 OpenBook - All
+                    rights reserved.</div>
+            </div>
+        </section>
+
+        <sherpa-footer class="mt-0"></sherpa-footer>
+    </main>
+
+    <login-modal id="loginModal"></login-modal>
+
+    <script src="components/navbar.js"></script>
+    <script src="components/footer.js"></script>
+    <script type="module" src="components/schools-slideshow.js?v=3"></script>
+    <script src="components/login-modal.js"></script>
+    <script src="script.js"></script>
+
+    <script>
+        function replaceIcons() {
+            if (window.feather && typeof window.feather.replace === 'function') {
+                window.feather.replace();
+            }
+        }
+
+        function openLoginModal() {
+            const modal = document.getElementById('loginModal');
+            if (modal && typeof modal.open === 'function') {
+                modal.open();
+            }
+        }
+
+        function goToFindTextbooks() {
+            window.location.href = '/find-textbooks.html';
+        }
+
+        function goToSchoolSearch() {
+            window.location.href = '/schools.html';
+        }
+
+        function shouldIgnoreKeydownTarget(target) {
+            if (!target) return false;
+            const tagName = target.tagName;
+            return tagName === 'INPUT' || tagName === 'TEXTAREA' || tagName === 'SELECT' || target.isContentEditable;
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            replaceIcons();
+
+            const loginButton = document.getElementById('login-button');
+            const findTextbooksLink = document.getElementById('find-textbooks-link');
+            const heroSearch = document.getElementById('hero-search');
+            const heroSearchButton = document.getElementById('hero-search-button');
+            const app = document.getElementById('app');
+            const testimonialsGrid = document.getElementById('testimonials-grid');
+
+            if (loginButton) {
+                loginButton.addEventListener('click', openLoginModal);
+            }
+
+            if (findTextbooksLink) {
+                findTextbooksLink.addEventListener('click', function(event) {
+                    event.preventDefault();
+                    goToFindTextbooks();
+                });
+            }
+
+            if (heroSearchButton) {
+                heroSearchButton.addEventListener('click', goToSchoolSearch);
+            }
+
+            if (heroSearch) {
+                heroSearch.addEventListener('keydown', function(event) {
+                    if (event.key === 'Enter') {
+                        event.preventDefault();
+                        goToSchoolSearch();
+                    }
+                });
+            }
+
+            let scrollContainer = window;
+            let getScrollTop = function() {
+                return window.scrollY || window.pageYOffset || 0;
+            };
+            let useAppScroll = false;
+
+            const setScrollMode = function() {
+                if (!app) {
+                    document.body.classList.remove('use-app-scroll');
+                    useAppScroll = false;
+                    scrollContainer = window;
+                    return;
+                }
+
+                const docScrollable = (document.documentElement.scrollHeight - window.innerHeight) > 4;
+                const appScrollable = (app.scrollHeight - app.clientHeight) > 4;
+                useAppScroll = !docScrollable && appScrollable;
+                document.body.classList.toggle('use-app-scroll', useAppScroll);
+                scrollContainer = useAppScroll ? app : window;
+                getScrollTop = useAppScroll
+                    ? function() { return app.scrollTop; }
+                    : function() { return window.scrollY || window.pageYOffset || 0; };
+            };
+
+            setScrollMode();
+            window.addEventListener('load', setScrollMode);
+            window.addEventListener('resize', setScrollMode);
+
+            window.addEventListener('wheel', function(event) {
+                if (!useAppScroll || !app) return;
+                if ((app.scrollHeight - app.clientHeight) <= 4) return;
+                app.scrollTop += event.deltaY;
+                event.preventDefault();
+            }, { passive: false });
+
+            window.addEventListener('keydown', function(event) {
+                if (!useAppScroll || !app) return;
+                if (shouldIgnoreKeydownTarget(event.target)) return;
+                const key = event.key;
+                const step = 120;
+                if (key === 'ArrowDown') { app.scrollTop += step; event.preventDefault(); }
+                if (key === 'ArrowUp') { app.scrollTop -= step; event.preventDefault(); }
+                if (key === 'PageDown') { app.scrollTop += window.innerHeight * 0.9; event.preventDefault(); }
+                if (key === 'PageUp') { app.scrollTop -= window.innerHeight * 0.9; event.preventDefault(); }
+                if (key === 'Home') { app.scrollTop = 0; event.preventDefault(); }
+                if (key === 'End') { app.scrollTop = app.scrollHeight; event.preventDefault(); }
+            });
+
+            const stopEl = document.getElementById('student-stories');
+            let stopY = 0;
+
+            const updateStopPosition = function() {
+                if (!stopEl) return;
+                stopY = stopEl.offsetTop;
+            };
+
+            const syncSnapMode = function() {
+                if (!stopEl) return;
+                document.documentElement.classList.toggle('snap-off', getScrollTop() >= stopY);
+            };
+
+            if (stopEl) {
+                updateStopPosition();
+                syncSnapMode();
+                window.addEventListener('resize', function() {
+                    updateStopPosition();
+                    syncSnapMode();
+                });
+                window.addEventListener('load', function() {
+                    updateStopPosition();
+                    syncSnapMode();
+                });
+                window.addEventListener('scroll', function() {
+                    if (!useAppScroll) {
+                        syncSnapMode();
+                    }
+                }, { passive: true });
+                if (app) {
+                    app.addEventListener('scroll', function() {
+                        if (useAppScroll) {
+                            syncSnapMode();
+                        }
+                    }, { passive: true });
+                }
+            }
+
+            if (!testimonialsGrid) return;
+
+            const TESTIMONIALS = [
+                { name: 'Jessica Davidson', subtitle: "Computer Science, Stanford '25", pfp: 'https://static.photos/people/100x100/601', text: "I saved $347 on textbooks this semester. The reviews helped me avoid buying books that weren't even required. Game changer!", rating: 5, theme: 'primary' },
+                { name: 'Marcus Chen', subtitle: "EECS, MIT '24", pfp: 'https://static.photos/people/100x100/602', text: 'Found a study group for my algorithms class and we split the textbook cost 4 ways. Made friends AND saved money.', rating: 5, theme: 'secondary' },
+                { name: 'Aisha Patel', subtitle: "Biology, UC Berkeley '26", pfp: 'https://static.photos/people/100x100/603', text: 'The price comparison is insane. I was about to pay $200 at the campus store but got the same book for $45 on Amazon.', rating: 5, theme: 'green' },
+                { name: 'Noah Robinson', subtitle: "Finance, Michigan State '27", pfp: 'https://static.photos/people/100x100/604', text: 'I used the alerts and grabbed a rental the day it dropped. Saved enough for a week of groceries.', rating: 5, theme: 'primary' },
+                { name: 'Sofia Alvarez', subtitle: "Psychology, UCLA '26", pfp: 'https://static.photos/people/100x100/605', text: 'Loved seeing if the textbook was actually required before buying. The student notes are super honest.', rating: 5, theme: 'secondary' },
+                { name: 'Ethan Brooks', subtitle: "Mechanical Eng, Purdue '25", pfp: 'https://static.photos/people/100x100/606', text: 'Found a used copy for $32 that was $180 at my campus store. Zero hassle.', rating: 5, theme: 'green' },
+                { name: 'Maya Singh', subtitle: "Nursing, Ohio State '26", pfp: 'https://static.photos/people/100x100/607', text: 'The course search is clutch. I just typed my professor and it pulled the exact editions.', rating: 5, theme: 'primary' },
+                { name: 'Daniel Kim', subtitle: "Data Science, NYU '25", pfp: 'https://static.photos/people/100x100/608', text: 'Being able to compare rentals vs digital side-by-side saved me from buying the wrong format.', rating: 5, theme: 'secondary' },
+                { name: 'Priya Nair', subtitle: "Economics, UT Austin '27", pfp: 'https://static.photos/people/100x100/609', text: 'The reviews helped me learn that older editions were fine. Saved a ton.', rating: 5, theme: 'green' },
+                { name: 'Caleb Thompson', subtitle: "Business, Penn State '26", pfp: 'https://static.photos/people/100x100/610', text: 'I split a textbook with two classmates and we coordinated everything in one place.', rating: 5, theme: 'primary' },
+                { name: 'Hannah Lee', subtitle: "Chemistry, UW '25", pfp: 'https://static.photos/people/100x100/611', text: 'Price sources are legit. I found options I wouldn’t have checked otherwise.', rating: 5, theme: 'secondary' },
+                { name: 'Omar Hassan', subtitle: "Computer Eng, Georgia Tech '26", pfp: 'https://static.photos/people/100x100/612', text: 'Fast, clean, and the results actually match my section. Saved me a late-night scramble.', rating: 5, theme: 'green' }
+            ];
+
+            let tIndex = 0;
+            const VISIBLE = 3;
+            const INTERVAL_MS = 5500;
+            const CARD_FADE_MS = 900;
+            const CARD_STAGGER_MS = 500;
+            let tTimer = null;
+            let renderToken = 0;
+
+            const themeClass = function(theme) {
+                if (theme === 'secondary') return 'from-secondary-50 to-secondary-100 dark:from-slate-800 dark:to-slate-700';
+                if (theme === 'green') return 'from-green-50 to-emerald-100 dark:from-slate-800 dark:to-slate-700';
+                return 'from-primary-50 to-primary-100 dark:from-slate-800 dark:to-slate-700';
+            };
+
+            const starsHTML = function(rating) {
+                const full = Math.max(0, Math.min(5, Number(rating) || 0));
+                return Array.from({ length: 5 }, function(_, index) {
+                    return `<i data-feather="star" class="w-5 h-5 ${index < full ? 'text-amber-400 fill-current' : 'text-slate-300'}"></i>`;
+                }).join('');
+            };
+
+            const escapeHTML = function(value) {
+                return String(value)
+                    .replace(/&/g, '&amp;')
+                    .replace(/</g, '&lt;')
+                    .replace(/>/g, '&gt;')
+                    .replace(/"/g, '&quot;')
+                    .replace(/'/g, '&#39;');
+            };
+
+            const getVisibleTestimonials = function() {
+                const visibleCount = Math.min(VISIBLE, TESTIMONIALS.length);
+                return Array.from({ length: visibleCount }, function(_, index) {
+                    return TESTIMONIALS[(tIndex + index) % TESTIMONIALS.length];
+                });
+            };
+
+            const renderCards = function(items) {
+                testimonialsGrid.innerHTML = items.map(function(item) {
+                    return `
+                        <div class="testimonial-card p-8 rounded-3xl bg-gradient-to-br ${themeClass(item.theme)} fade-in">
+                            <div class="flex items-center gap-1 mb-4 stars-container">${starsHTML(item.rating)}</div>
+                            <p class="text-lg text-slate-700 dark:text-slate-300 mb-6 leading-relaxed">&quot;${escapeHTML(item.text)}&quot;</p>
+                            <div class="flex items-center gap-4">
+                                <img src="${escapeHTML(item.pfp)}" alt="${escapeHTML(item.name)}" class="w-12 h-12 rounded-full object-cover" loading="lazy">
+                                <div>
+                                    <div class="font-bold">${escapeHTML(item.name)}</div>
+                                    <div class="text-sm text-slate-500">${escapeHTML(item.subtitle)}</div>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+                replaceIcons();
+            };
+
+            const render = function(animated) {
+                if (!Array.isArray(TESTIMONIALS) || TESTIMONIALS.length === 0) {
+                    testimonialsGrid.innerHTML = '';
+                    return;
+                }
+
+                const items = getVisibleTestimonials();
+                const cards = testimonialsGrid.querySelectorAll('.testimonial-card');
+
+                if (!animated || cards.length !== items.length) {
+                    renderCards(items);
+                    return;
+                }
+
+                renderToken += 1;
+                const currentToken = renderToken;
+
+                cards.forEach(function(card, index) {
+                    window.setTimeout(function() {
+                        if (currentToken !== renderToken) return;
+                        card.classList.remove('fade-in');
+                        card.classList.add('fade-out');
+
+                        window.setTimeout(function() {
+                            if (currentToken !== renderToken) return;
+                            const item = items[index];
+                            card.className = `testimonial-card p-8 rounded-3xl bg-gradient-to-br ${themeClass(item.theme)} fade-in`;
+                            card.innerHTML = `
+                                <div class="flex items-center gap-1 mb-4 stars-container">${starsHTML(item.rating)}</div>
+                                <p class="text-lg text-slate-700 dark:text-slate-300 mb-6 leading-relaxed">&quot;${escapeHTML(item.text)}&quot;</p>
+                                <div class="flex items-center gap-4">
+                                    <img src="${escapeHTML(item.pfp)}" alt="${escapeHTML(item.name)}" class="w-12 h-12 rounded-full object-cover" loading="lazy">
+                                    <div>
+                                        <div class="font-bold">${escapeHTML(item.name)}</div>
+                                        <div class="text-sm text-slate-500">${escapeHTML(item.subtitle)}</div>
+                                    </div>
+                                </div>
+                            `;
+                            replaceIcons();
+                        }, CARD_FADE_MS);
+                    }, index * CARD_STAGGER_MS);
+                });
+            };
+
+            const next = function() {
+                if (TESTIMONIALS.length === 0) return;
+                tIndex = (tIndex + Math.min(VISIBLE, TESTIMONIALS.length)) % TESTIMONIALS.length;
+                render(true);
+            };
+
+            const start = function() {
+                if (tTimer) {
+                    window.clearInterval(tTimer);
+                    tTimer = null;
+                }
+                if (TESTIMONIALS.length > VISIBLE) {
+                    tTimer = window.setInterval(next, INTERVAL_MS);
+                }
+            };
+
+            const stop = function() {
+                if (tTimer) {
+                    window.clearInterval(tTimer);
+                }
+                tTimer = null;
+                renderToken += 1;
+            };
+
+            render(false);
+            start();
+
+            testimonialsGrid.addEventListener('mouseenter', stop);
+            testimonialsGrid.addEventListener('mouseleave', start);
+            document.addEventListener('visibilitychange', function() {
+                if (document.hidden) {
+                    stop();
+                } else {
+                    start();
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>
